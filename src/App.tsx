@@ -1,24 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  return (
+    const [value,setValue]=useState<number>(0)
+    useEffect(()=>{
+        //debugger
+        let valueLocalStorage=localStorage.getItem('countervalue')
+        if(valueLocalStorage){
+            let newvalue=JSON.parse(valueLocalStorage)
+            setValue(newvalue)
+        }
+    },[])
+
+    useEffect(()=>{
+        let value2=localStorage.getItem('countervalue')
+        console.log(value2)
+        localStorage.setItem('countervalue',JSON.stringify(value))
+    },[value])
+
+  const setClickHandler=()=>{
+        setValue(value+1)
+  }
+    return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <div>{value}</div>
+   <button onClick={setClickHandler}>Send</button>
     </div>
   );
 }
