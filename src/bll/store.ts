@@ -6,15 +6,20 @@ import thunk from "redux-thunk";
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
-    tasks: CountReducer
+    value: CountReducer
 })
+let preloaderState;
+const persistedTodosString = localStorage.getItem('app-counter')
+if (persistedTodosString) {
+    preloaderState = JSON.parse(persistedTodosString)
+}
 // непосредственно создаём store
-export const store = createStore(rootReducer, applyMiddleware(thunk));
+export const store = createStore(rootReducer, preloaderState, applyMiddleware(thunk));
 export type AppRootStateType = ReturnType<typeof rootReducer>
-
-type AppStoreType = typeof store
+store.subscribe(() => {
+    localStorage.setItem('app-counter', JSON.stringify(store.getState()))
+})
 export type AppStateType = ReturnType<typeof rootReducer>
-
 
 
 //export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, AnyAction>

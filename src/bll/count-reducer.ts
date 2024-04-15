@@ -27,20 +27,4 @@ export type GetCountACType = ReturnType<typeof getCountAC>
 export const setCountAC = () => ({type: 'SET-COUNT'} as const)
 const getCountAC = (count: number) => ({type: 'GET-COUNT', count} as const)
 
-export const setCountThunk = () => (dispatch: Dispatch,getState:()=>AppRootStateType) => {
-    let t=getState()
-   // console.log(t.tasks.count)
-    localStorage.setItem('countervalue',JSON.stringify(getState().tasks.count+1))
-    dispatch(setCountAC())
-}
 
-export const getCountThunk = () => (dispatch: Dispatch<AnyAction>) => {
-        let valueLocalStorage=localStorage.getItem('countervalue')
-
-        if(valueLocalStorage){
-            let newvalue=JSON.parse(valueLocalStorage)
-            console.log(newvalue)
-            dispatch(getCountAC(newvalue))
-        }
-
-}
