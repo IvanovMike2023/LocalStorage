@@ -1,30 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {useDispatch, useSelector} from "react-redux";
+import {AppStateType} from "./bll/store";
+import {getCountThunk, setCountAC, setCountThunk} from "./bll/count-reducer";
 
 function App() {
     const [value,setValue]=useState<number>(0)
+    const count=useSelector<AppStateType,number>(state => state.tasks.count)
+    const dispatch=useDispatch()
+    const setClickHandler=()=>{
+        dispatch(setCountThunk())
+    }
     useEffect(()=>{
-        //debugger
-        let valueLocalStorage=localStorage.getItem('countervalue')
-        if(valueLocalStorage){
-            let newvalue=JSON.parse(valueLocalStorage)
-            setValue(newvalue)
-        }
+        dispatch(getCountThunk())
+
     },[])
 
-    useEffect(()=>{
-        let value2=localStorage.getItem('countervalue')
-        console.log(value2)
-        localStorage.setItem('countervalue',JSON.stringify(value))
-    },[value])
+    // useEffect(()=>{
+    //     let value2=localStorage.getItem('countervalue')
+    //     localStorage.setItem('countervalue',JSON.stringify(value))
+    // },[value])
 
-  const setClickHandler=()=>{
-        setValue(value+1)
-  }
+
     return (
     <div className="App">
-        <div>{value}</div>
+        <div>{count}</div>
    <button onClick={setClickHandler}>Send</button>
     </div>
   );
