@@ -1,6 +1,7 @@
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {CountReducer} from "./count-reducer";
 import thunk from "redux-thunk";
+import {loadState, saveState} from "../utils/utils-localStorage";
 
 
 // объединяя reducer-ы с помощью combineReducers,
@@ -8,16 +9,12 @@ import thunk from "redux-thunk";
 const rootReducer = combineReducers({
     value: CountReducer
 })
-let preloaderState;
-const persistedTodosString = localStorage.getItem('app-counter')
-if (persistedTodosString) {
-    preloaderState = JSON.parse(persistedTodosString)
-}
+
 // непосредственно создаём store
-export const store = createStore(rootReducer, preloaderState, applyMiddleware(thunk));
+export const store = createStore(rootReducer, loadState(), applyMiddleware(thunk));
 export type AppRootStateType = ReturnType<typeof rootReducer>
 store.subscribe(() => {
-    localStorage.setItem('app-counter', JSON.stringify(store.getState()))
+    saveState(store.getState())
 })
 export type AppStateType = ReturnType<typeof rootReducer>
 
